@@ -1,0 +1,38 @@
+post:
+  tags:
+    - Eux PDF flattener
+  summary: Flatten
+  description: Flatten PDF
+  operationId: flattenPdf
+  requestBody:
+    required: true
+    description: Incoming PDF
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            # 'file' will be the field name in this multipart request
+            file:
+              type: string
+              format: binary  # binary file contents
+  responses:
+    '200':
+      description: Flattened PDF file
+      content:
+        application/pdf:
+          schema:
+            type: string
+            format: binary
+    '400':
+      $ref: '../common/responses.yaml#/400'
+    '401':
+      $ref: '../common/responses.yaml#/401'
+    '403':
+      $ref: '../common/responses.yaml#/403'
+    '404':
+      $ref: '../common/responses.yaml#/409'
+    '409':
+      $ref: '../common/responses.yaml#/409'
+    '500':
+      $ref: '../common/responses.yaml#/500'
