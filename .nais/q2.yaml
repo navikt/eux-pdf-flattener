@@ -1,5 +1,5 @@
 name: eux-pdf-flattener-q2
-ingress: https://eux-pdf-flattener-q2.intern.nav.dev.no
+ingress: https://eux-pdf-flattener-q2.intern.dev.nav.no
 
 application:
   eux-fagmodul-journalfoering:
