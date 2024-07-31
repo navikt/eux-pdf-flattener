@@ -32,7 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <swagger.annotations.version>2.2.7</swagger.annotations.version>
         <pdfbox.version>2.0.22</pdfbox.version>
-        <apache-poi.version>4.1.2</apache-poi.version>
+        <apache-poi.version>5.2.1</apache-poi.version>
         <twelvemonkeys-imageio.version>3.5</twelvemonkeys-imageio.version>
         <opensagres.version>2.0.2</opensagres.version>
         <tika.version>1.24.1</tika.version>
