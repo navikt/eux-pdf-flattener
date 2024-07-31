@@ -1,0 +1,11 @@
+name: eux-pdf-flattener-q2
+ingress: https://eux-pdf-flattener-q2.intern.nav.dev.no
+
+application:
+  eux-fagmodul-journalfoering:
+    name: eux-fagmodul-journalfoering-q2
+    namespace: eessibasis
+
+cluster:
+  fss: dev-fss
+  gcp: dev-gcp
