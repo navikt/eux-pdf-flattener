@@ -37,8 +37,8 @@ ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # RUN  echo $(ls /usr/local/nvm/)
-RUN file="$(ls -1 /usr/local/nvm/ -al)" && echo $file
-RUN file="$(ls -1 /usr/local/nvm/nvm-exec -al)" && echo $file
+#RUN file="$(ls -1 /usr/local/nvm/ -al)" && echo $file
+#RUN file="$(ls -1 /usr/local/nvm/nvm-exec -al)" && echo $file
 #RUN ls ~/.nvm/ -al
 #RUN echo `ps -p $$`
 # RUN source ~/.bashrc
@@ -52,6 +52,7 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 
 RUN apt-get update && apt -y install  ./google-chrome-stable_current_amd64.deb
 # RUN ls -l
+USER apprunner
 
 RUN git clone https://github.com/mozilla/pdf.js.git
 # RUN ls -l
@@ -63,7 +64,7 @@ RUN cd pdf.js && npm install -g gulp-cli
 
 RUN cd pdf.js && mkdir out && mkdir in
 
-RUN google-chrome --version
+# RUN google-chrome --version
 
 
 # RUN file="$(ls -1 /usr/local/ -al)" && echo $file
@@ -75,6 +76,7 @@ RUN npm install -g -save html-pdf-chrome
 RUN npm install -g pm2
 
 
+
 COPY ./print.js ./entrypoint.sh ./chrome.sh ./xfa.pdf /
 COPY ./xfa.pdf pdf.js/in/xfa.pdf
 RUN chmod 777 /print.js
@@ -84,6 +86,11 @@ RUN chmod 777 /xfa.pdf
 # ADD eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
 
 # CMD ["node" , "print.js"]
-ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["tail", "-f", "/dev/null"]
-CMD ["/chrome.sh"]
+#CMD ["/chrome.sh"]
+COPY eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
+EXPOSE 8080
+
+COPY ./.nais/03-start-pm2-gulp.sh /init-scripts/03-start-pm2-gulp.sh
+
