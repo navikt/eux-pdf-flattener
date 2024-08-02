@@ -75,11 +75,11 @@ RUN npm install -g -save html-pdf-chrome
 RUN npm install -g pm2
 
 
-COPY ./print.js ./entrypoint.sh ./chrome.sh ./xfa.pdf /
+COPY ./print.js ./xfa.pdf /
 COPY ./xfa.pdf pdf.js/in/xfa.pdf
 RUN chmod 777 /print.js
-RUN chmod 777 /chrome.sh
-RUN chmod 777 /entrypoint.sh
+# RUN chmod 777 /chrome.sh
+# RUN chmod 777 /entrypoint.sh
 RUN chmod 777 /xfa.pdf
 # ADD eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
 

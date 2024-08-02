@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+set -e
+
+
 export PM2_HOME="/tmp/.pm2"
 
 pm2 start google-chrome \
