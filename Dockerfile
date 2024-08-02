@@ -53,7 +53,22 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 RUN apt-get update && apt -y install  ./google-chrome-stable_current_amd64.deb
 
 RUN mkdir /home/apprunner
+RUN mkdir pdf.js
 RUN chmod 777 /home/apprunner
+RUN chmod 777 pdf.js
+RUN cd pdf.js && npm install -g gulp-cli
+RUN npm install -g -save html-pdf-chrome
+RUN npm install -g pm2
+COPY ./print.js ./xfa.pdf /
+RUN mkdir tmppdf
+RUN chmod 777 tmppdf
+COPY ./xfa.pdf tmppdf/xfa.pdf
+RUN chmod 777 /print.js
+# RUN chmod 777 /chrome.sh
+# RUN chmod 777 /entrypoint.sh
+RUN chmod 777 /xfa.pdf
+RUN chmod 777 tmppdf/xfa.pdf
+
 # RUN ls -l
 USER apprunner
 ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
@@ -65,11 +80,10 @@ RUN git clone https://github.com/mozilla/pdf.js.git
 RUN cd pdf.js && npm install
 
 #RUN cd pdf.js && npm install
-RUN cd pdf.js && npm install -g gulp-cli
 # RUN cd pdf.js && npm link module gulp
 
 RUN cd pdf.js && mkdir out && mkdir in
-
+RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
 RUN google-chrome --version
 
 
@@ -77,17 +91,9 @@ RUN google-chrome --version
 # RUN file="$(ls -1 /usr/local/nvm/versions/node -al)" && echo $file
 
 
-RUN npm install -g -save html-pdf-chrome
-
-RUN npm install -g pm2
 
 
-COPY ./print.js ./xfa.pdf /
-COPY ./xfa.pdf pdf.js/in/xfa.pdf
-RUN chmod 777 /print.js
-# RUN chmod 777 /chrome.sh
-# RUN chmod 777 /entrypoint.sh
-RUN chmod 777 /xfa.pdf
+
 # ADD eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
 
 # CMD ["node" , "print.js"]
