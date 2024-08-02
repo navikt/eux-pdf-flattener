@@ -105,8 +105,9 @@ RUN google-chrome --version
 #ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["tail", "-f", "/dev/null"]
 #CMD ["/chrome.sh"]
+COPY ./.nais/03-start-pm2-gulp.sh /init-scripts/03-start-pm2-gulp.sh
+
 COPY eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
 EXPOSE 8080
 
-COPY ./.nais/03-start-pm2-gulp.sh /init-scripts/03-start-pm2-gulp.sh
-
+WORKDIR /app
