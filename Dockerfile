@@ -52,6 +52,7 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 
 RUN apt-get update && apt -y install  ./google-chrome-stable_current_amd64.deb
 # RUN ls -l
+USER apprunner
 
 RUN git clone https://github.com/mozilla/pdf.js.git
 # RUN ls -l
