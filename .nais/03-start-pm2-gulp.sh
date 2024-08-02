@@ -32,5 +32,5 @@ node --version
 npm --version
 npx --version
 cd /tmp/pdf.js
-npx gulp server
+# npx gulp server
 # tail -f /dev/null
