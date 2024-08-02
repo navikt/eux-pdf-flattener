@@ -85,6 +85,9 @@ RUN cd pdf.js && npm install
 
 RUN cd pdf.js && mkdir out && mkdir in
 RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
+USER root
+RUN cd pdf.js && npm link gulp
+USER apprunner
 RUN chmod -R 777 pdf.js
 RUN google-chrome --version
 
