@@ -63,7 +63,7 @@ RUN cd pdf.js && npm install -g gulp-cli
 
 RUN cd pdf.js && mkdir out && mkdir in
 
-# RUN google-chrome --version
+RUN google-chrome --version
 
 
 # RUN file="$(ls -1 /usr/local/ -al)" && echo $file
@@ -73,7 +73,6 @@ RUN cd pdf.js && mkdir out && mkdir in
 RUN npm install -g -save html-pdf-chrome
 
 RUN npm install -g pm2
-
 
 
 COPY ./print.js ./entrypoint.sh ./chrome.sh ./xfa.pdf /
@@ -88,8 +87,6 @@ RUN chmod 777 /xfa.pdf
 #ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["tail", "-f", "/dev/null"]
 #CMD ["/chrome.sh"]
-USER apprunner
-
 COPY eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
 EXPOSE 8080
 
