@@ -23,8 +23,11 @@ pm2 start google-chrome \
 #  --disable-extensions \
 
 # remove root and sandbox-setting
+echo "Copying"
+ls -l /app/pdf.js
 cp -r /app/pdf.js /tmp/pdf.js
 
+echo "Starting gulp"
 cd /tmp/pdf.js
 npx gulp server
 # tail -f /dev/null

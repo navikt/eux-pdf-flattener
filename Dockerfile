@@ -68,6 +68,7 @@ RUN chmod 777 /print.js
 # RUN chmod 777 /entrypoint.sh
 RUN chmod 777 /xfa.pdf
 RUN chmod 777 tmppdf/xfa.pdf
+RUN chown apprunner pdf.js
 
 # RUN ls -l
 USER apprunner
@@ -84,6 +85,7 @@ RUN cd pdf.js && npm install
 
 RUN cd pdf.js && mkdir out && mkdir in
 RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
+RUN chmod -R 777 pdf.js
 RUN google-chrome --version
 
 
