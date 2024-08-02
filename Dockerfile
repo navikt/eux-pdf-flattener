@@ -51,8 +51,14 @@ ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 RUN apt-get update && apt -y install  ./google-chrome-stable_current_amd64.deb
+
+RUN mkdir /home/apprunner
+RUN chmod 777 /home/apprunner
 # RUN ls -l
 USER apprunner
+ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
 
 RUN git clone https://github.com/mozilla/pdf.js.git
 # RUN ls -l
