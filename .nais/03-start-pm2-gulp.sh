@@ -28,6 +28,9 @@ ls -l /app/pdf.js
 cp -r /app/pdf.js /tmp/pdf.js
 
 echo "Starting gulp"
+node --version
+npm --version
+npx --version
 cd /tmp/pdf.js
 npx gulp server
 # tail -f /dev/null
