@@ -31,6 +31,10 @@ echo "Starting gulp"
 node --version
 npm --version
 npx --version
-cd /tmp/pdf.js
+# cd /tmp/pdf.js
+cd /app
+
+echo "$PWD"
+ls /app
 # npx gulp server
 # tail -f /dev/null
