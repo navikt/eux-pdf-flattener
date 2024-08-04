@@ -33,8 +33,9 @@ npm --version
 npx --version
 # cd /tmp/pdf.js
 cd /tmp/pdf.js
-npx gulp server
+pm2 start npx gulp server
 
+pm2 ps
 cd /app
 
 echo "$PWD"
