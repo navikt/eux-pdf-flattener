@@ -33,7 +33,7 @@ npm --version
 npx --version
 # cd /tmp/pdf.js
 cd /tmp/pdf.js
-pm2 start npx gulp server
+pm2 start "npx gulp server" --name gulpServer
 
 pm2 ps
 cd /app
