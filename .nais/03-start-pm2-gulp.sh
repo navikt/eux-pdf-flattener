@@ -32,6 +32,9 @@ node --version
 npm --version
 npx --version
 # cd /tmp/pdf.js
+cd /tmp/pdf.js
+npx gulp server
+
 cd /app
 
 echo "$PWD"
