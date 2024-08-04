@@ -22,12 +22,12 @@ class FlattenPdfService(
     fun flattenPdf(incomingPdf: ByteArray): ByteArray {
         val randomName = randomStringByKotlinCollectionRandom() + ".pdf"
         File(inPath + randomName).writeBytes(incomingPdf)
-        val process = Runtime.getRuntime().exec(arrayOf("node", printJsPath))
+        val process = Runtime.getRuntime().exec(arrayOf("node", printJsPath, randomName))
         val exitCode = process.waitFor()
 
         if (exitCode == 0) {
             val listFiles = File(outPath).listFiles()
-            listFiles.forEach { f -> log.info { "File " + f.name } }
+            listFiles.forEach { f -> log.info { "File " + f.canonicalPath } }
             val readBytes = File(outPath + randomName).readBytes()
             return readBytes
         } else {
