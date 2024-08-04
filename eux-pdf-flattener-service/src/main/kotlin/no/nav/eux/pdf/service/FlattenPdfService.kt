@@ -27,7 +27,7 @@ class FlattenPdfService(
 
         if (exitCode == 0) {
             val listFiles = File(outPath).listFiles()
-            log.info { "Files $listFiles" }
+            listFiles.forEach { f -> log.info { "File " + f.name } }
             val readBytes = File(outPath + randomName).readBytes()
             return readBytes
         } else {
