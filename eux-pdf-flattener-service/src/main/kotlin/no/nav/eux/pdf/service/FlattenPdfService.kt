@@ -15,7 +15,7 @@ class FlattenPdfService(
     val inPath= "/tmp/pdf.js/in/"
     val outPath = "/tmp/pdf.js/out/"
     val printJsPath = "/print.js"
-    val timeout = 65;
+    val timeout = 55;
     val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
 
@@ -26,6 +26,8 @@ class FlattenPdfService(
         val exitCode = process.waitFor()
 
         if (exitCode == 0) {
+            val listFiles = File(outPath).listFiles()
+            log.info { "Files $listFiles" }
             val readBytes = File(outPath + randomName).readBytes()
             return readBytes
         } else {
