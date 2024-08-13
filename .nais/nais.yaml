@@ -53,4 +53,4 @@ spec:
       rules:
         - application: {{ application.eux-fagmodul-journalfoering.name }}
           namespace: {{ application.eux-fagmodul-journalfoering.namespace }}
-          cluster: {{ cluster.gcp }}
+          cluster: {{ cluster.fss }}
