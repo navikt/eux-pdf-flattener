@@ -5,6 +5,10 @@ metadata:
   namespace: eessibasis
   labels:
     team: eessibasis
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "256M"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
 spec:
   image: {{ image }}
   ingresses:
