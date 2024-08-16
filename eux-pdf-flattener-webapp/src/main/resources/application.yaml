@@ -4,6 +4,14 @@ spring:
   jackson:
     deserialization:
       ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
+  servlet:
+    multipart:
+      max-file-size: 256MB
+      max-request-size: 256MB
+      enabled: true
+  tomcat:
+    max-swallow-size: 256MB
+    http-post-size: 256MB
 
 no.nav.security.jwt:
   issuer:
