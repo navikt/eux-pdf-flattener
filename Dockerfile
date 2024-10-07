@@ -59,14 +59,16 @@ RUN chmod 777 pdf.js
 RUN cd pdf.js && npm install -g gulp-cli
 RUN npm install -g -save html-pdf-chrome
 RUN npm install -g pm2
-COPY ./print.js ./xfa.pdf /
+COPY ./print.js ./xfa.pdf /count.js /medical.pdf /
 RUN mkdir tmppdf
 RUN chmod 777 tmppdf
 COPY ./xfa.pdf tmppdf/xfa.pdf
 RUN chmod 777 /print.js
+RUN chmod 777 /count.js
 # RUN chmod 777 /chrome.sh
 # RUN chmod 777 /entrypoint.sh
 RUN chmod 777 /xfa.pdf
+RUN chmod 777 /medical.pdf
 RUN chmod 777 tmppdf/xfa.pdf
 RUN chown apprunner pdf.js
 
@@ -84,7 +86,7 @@ RUN cd pdf.js && npm install
 # RUN cd pdf.js && npm link module gulp
 
 RUN cd pdf.js && mkdir out && mkdir in
-RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
+# RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
 USER root
 RUN cd pdf.js && npm link gulp
 USER apprunner
@@ -111,3 +113,7 @@ COPY eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
 EXPOSE 8080
 
 WORKDIR /app
+
+# ENTRYPOINT ["/entrypoint.sh"]
+
+# CMD ["tail", "-f", "/dev/null"]
