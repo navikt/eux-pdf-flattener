@@ -23,8 +23,8 @@ RUN  apt-get update -y && \
 
 ENV NVM_DIR /usr/local/nvm
 #ENV NVM_DIR ~/.nvm
-ENV NODE_VERSION 18.20.4
 ENV TEST test
+ENV NODE_VERSION 18.20.4
 RUN mkdir -p $NVM_DIR
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 RUN /bin/bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use --delete-prefix $NODE_VERSION"
