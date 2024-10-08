@@ -86,7 +86,7 @@ RUN cd pdf.js && npm install
 # RUN cd pdf.js && npm link module gulp
 
 RUN cd pdf.js && mkdir out && mkdir in
-RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
+# RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
 USER root
 RUN cd pdf.js && npm link gulp
 USER apprunner
