@@ -37,10 +37,15 @@ class FlattenPdfService(
         } else {
             log.error { "Feilet å konvertere $randomName. Avsluttet med kode $exitCode" }
             try {
-                BufferedReader(InputStreamReader(process.errorStream)).use { b ->
-                    var line: String?
-                    if ((b.readLine().also { line = it }) != null) println(line)
-                }
+                val bufferedReader = BufferedReader(InputStreamReader(process.errorStream))
+                var line : String? = null
+                do {
+                    line = bufferedReader.readLine();
+                    if (line != null) {
+                        println(line)
+                    }
+
+                } while (line != null)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
