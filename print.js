@@ -7,8 +7,8 @@ const options = {
 };
 
 var args = process.argv.slice(2);
-const url = 'http://localhost:8888/web/viewer.html?file=/in/' + args[0];
-const outFile = '/tmp/pdf.js/out/' + args[0]
+const url = 'http://localhost:8888/web/viewer.html?page=' +args[2] + '&file=/in/' + args[0] + args[1];
+const outFile = '/tmp/pdf.js/out/' + args[0] + args[1]
 process.stdout.write(url)
 process.stdout.write(outFile)
 let pdf = htmlPdf.create(url, options).then((pdf) => pdf.toFile(outFile));

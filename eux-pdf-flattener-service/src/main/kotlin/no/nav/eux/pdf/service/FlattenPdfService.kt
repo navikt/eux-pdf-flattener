@@ -23,16 +23,17 @@ class FlattenPdfService(
 
 
     fun flattenPdf(incomingPdf: ByteArray): ByteArray {
-        val randomName = randomStringByKotlinCollectionRandom() + ".pdf"
+        val randomName = randomStringByKotlinCollectionRandom()
+        val pdf = ".pdf"
         File(inPath + randomName).writeBytes(incomingPdf)
-        val process = Runtime.getRuntime().exec(arrayOf("node", printJsPath, randomName))
+        val process = Runtime.getRuntime().exec(arrayOf("node", printJsPath, randomName, pdf, "2"))
         val exitCode = process.waitFor()
 
 
         if (exitCode == 0) {
             val listFiles = File(outPath).listFiles()
             listFiles.forEach { f -> log.info { "File " + f.canonicalPath } }
-            val readBytes = File(outPath + randomName).readBytes()
+            val readBytes = File(outPath + randomName + pdf).readBytes()
             return readBytes
         } else {
             log.error { "Feilet å konvertere $randomName. Avsluttet med kode $exitCode" }
