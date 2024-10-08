@@ -3,8 +3,11 @@ package no.nav.eux.pdf.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
+import java.io.BufferedReader
 import java.io.File
+import java.io.IOException
+import java.io.InputStreamReader
+
 
 @Service
 class FlattenPdfService(
@@ -25,6 +28,7 @@ class FlattenPdfService(
         val process = Runtime.getRuntime().exec(arrayOf("node", printJsPath, randomName))
         val exitCode = process.waitFor()
 
+
         if (exitCode == 0) {
             val listFiles = File(outPath).listFiles()
             listFiles.forEach { f -> log.info { "File " + f.canonicalPath } }
@@ -32,6 +36,15 @@ class FlattenPdfService(
             return readBytes
         } else {
             log.error { "Feilet å konvertere $randomName. Avsluttet med kode $exitCode" }
+            try {
+                BufferedReader(InputStreamReader(process.errorStream)).use { b ->
+                    var line: String?
+                    if ((b.readLine().also { line = it }) != null) println(line)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
             throw IllegalArgumentException("Feilet å konvertere $randomName. Avsluttet med kode $exitCode")
         }
         // write to pdf.js/in
