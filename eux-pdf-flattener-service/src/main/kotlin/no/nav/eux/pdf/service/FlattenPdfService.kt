@@ -2,22 +2,43 @@ package no.nav.eux.pdf.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
+import org.apache.pdfbox.io.MemoryUsageSetting
+import org.apache.pdfbox.multipdf.PDFMergerUtility
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.springframework.stereotype.Service
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
+import java.io.*
+import java.util.*
 
 
 @Service
 class FlattenPdfService(
     val om: ObjectMapper,
 ) {
+    val options = ChromeOptions()
+        .addArguments(
+            "--headless=new",
+            "--disable-infobars",
+            "--disable-extensions",
+            "--disable-popup-blocking",
+            "--run-all-compositor-stages-before-draw",
+            "--disable-gpu",
+//        "--virtual-time-budget=10000",
+            "--no-pdf-header-footer"
+        )
+    val printParams = mapOf(
+        "landscape" to false,
+        "paperWidth" to 8.27,
+        "paperHeight" to 11.69
+    )
+
+
     val log = logger {}
 
     val inPath= "/tmp/pdf.js/in/"
     val outPath = "/tmp/pdf.js/out/"
     val printJsPath = "/print.js"
+    val countJsPath = "/count.js"
     val timeout = 55;
     val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
@@ -26,32 +47,65 @@ class FlattenPdfService(
         val randomName = randomStringByKotlinCollectionRandom()
         val pdf = ".pdf"
         File(inPath + randomName + pdf).writeBytes(incomingPdf)
-        val process = Runtime.getRuntime().exec(arrayOf("node", printJsPath, randomName, pdf, "2"))
-        val exitCode = process.waitFor()
-
-        try {
-            val bufferedReader = BufferedReader(InputStreamReader(process.inputStream))
-            var line : String? = null
-            do {
-                line = bufferedReader.readLine();
-                if (line != null) {
-                    println(line)
-                }
-
-            } while (line != null)
-        } catch (e: IOException) {
-            e.printStackTrace()
+        val builder = ProcessBuilder().command("node", countJsPath, randomName + pdf)
+        val countProcess = builder.start()
+        val results = BufferedReader(InputStreamReader(countProcess.inputStream)).lines().toList()
+        var totalPages = 0
+        if (!results.isEmpty()) {
+            totalPages = results.get(0).trim().toInt()
+            log.info { "Count $totalPages" }
         }
 
-        if (exitCode == 0) {
-            val listFiles = File(outPath).listFiles()
-            listFiles.forEach { f -> log.info { "File " + f.canonicalPath } }
-            val readBytes = File(outPath + randomName + pdf).readBytes()
-            return readBytes
-        } else {
-            log.error { "Feilet å konvertere $randomName. Avsluttet med kode $exitCode" }
+        for (i in 1..totalPages) {
+            log.info {"Processing page $i" }
+            val driver: ChromeDriver = ChromeDriver(options)
+// const url = 'http://localhost:8888/web/viewer.html?file=/in/' + args[0] + args[1] + '#page=' +args[2];
+            val url = "http://localhost:8888/web/viewer.html?file=/in/$randomName$pdf#page=$i"
+            driver.get(url)
+            Thread.sleep(10000L)
+            //val mvm : MultiValueMap<String, String> = LinkedMultiValueMap(params);
+
+            val output = driver.executeCdpCommand( "Page.printToPDF", printParams )
+            val filename = "/tmp/pdf.js/out/$randomName$i$pdf"
+            val fileOutputStream: FileOutputStream = FileOutputStream(filename)
+            val byteArray = Base64.getDecoder().decode(output.get("data") as String)
+            fileOutputStream.write(byteArray)
+            fileOutputStream.close()
+            driver.quit()
+        }
+
+        log.info { "Starting merge "}
+        val completeFilename = "/tmp/pdf.js/out/$randomName$pdf"
+//        val completeFileOutputStream: FileOutputStream = FileOutputStream(completeFilename)
+//    completeFileOutputStream.write(byteArray)
+//    completeFileOutputStream.close()
+
+        val utility = PDFMergerUtility()
+        utility.destinationFileName = completeFilename
+
+        for (i in 1..totalPages) {
+            val filename = "/tmp/pdf.js/out/$randomName$i$pdf"
+            log.info { "Adding $filename "}
+            utility.addSource(filename)
+        }
+
+//    utility.addSource("testpg1.pdf")
+//    utility.addSource("testpg2.pdf")
+        log.info { "Finalizing merge "}
+        utility.mergeDocuments(MemoryUsageSetting.setupMixed(100_000_000L))
+
+
+        log.info { "Retrieving final file"}
+
+        val readBytes = File(completeFilename).readBytes()
+        return readBytes
+
+/*
+        for (i in 1..count) {
+            val process = Runtime.getRuntime().exec(arrayOf("node", printJsPath, randomName, pdf, i.toString()))
+            val exitCode = process.waitFor()
             try {
-                val bufferedReader = BufferedReader(InputStreamReader(process.errorStream))
+                val bufferedReader = BufferedReader(InputStreamReader(process.inputStream))
                 var line : String? = null
                 do {
                     line = bufferedReader.readLine();
@@ -63,9 +117,36 @@ class FlattenPdfService(
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+            if (exitCode == 0) {
+                val listFiles = File(outPath).listFiles()
+                listFiles.forEach { f -> log.info { "File " + f.canonicalPath } }
+                val readBytes = File(outPath + randomName + pdf).readBytes()
+                return readBytes
+            } else {
+                log.error { "Feilet å konvertere $randomName side $i. Avsluttet med kode $exitCode" }
+                try {
+                    val bufferedReader = BufferedReader(InputStreamReader(process.errorStream))
+                    var line : String? = null
+                    do {
+                        line = bufferedReader.readLine();
+                        if (line != null) {
+                            println(line)
+                        }
 
-            throw IllegalArgumentException("Feilet å konvertere $randomName. Avsluttet med kode $exitCode")
+                    } while (line != null)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+                throw IllegalArgumentException("Feilet å konvertere $randomName. Avsluttet med kode $exitCode")
+            }
+
         }
+
+ */
+//        return ByteArray(0)
+
+
         // write to pdf.js/in
         // call print.js
         // read from pdf.js.out
