@@ -49,7 +49,23 @@ class FlattenPdfService(
         File(inPath + randomName + pdf).writeBytes(incomingPdf)
         val builder = ProcessBuilder().command("node", countJsPath, inPath + randomName + pdf)
         val countProcess = builder.start()
-        countProcess.waitFor()
+        val exitCode = countProcess.waitFor()
+        if (exitCode != 0) {
+            log.error { "Feilet å lese antall sider. Avsluttet med kode $exitCode" }
+            try {
+                val bufferedReader = BufferedReader(InputStreamReader(countProcess.errorStream))
+                var line : String? = null
+                do {
+                    line = bufferedReader.readLine();
+                    if (line != null) {
+                        println(line)
+                    }
+
+                } while (line != null)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
         val results = BufferedReader(InputStreamReader(countProcess.inputStream)).lines().toList()
         var totalPages = 0
         if (!results.isEmpty()) {
