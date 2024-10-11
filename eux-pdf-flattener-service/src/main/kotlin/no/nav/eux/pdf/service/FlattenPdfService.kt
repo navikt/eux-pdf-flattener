@@ -47,7 +47,7 @@ class FlattenPdfService(
         val randomName = randomStringByKotlinCollectionRandom()
         val pdf = ".pdf"
         File(inPath + randomName + pdf).writeBytes(incomingPdf)
-        val builder = ProcessBuilder().command("node", countJsPath, randomName + pdf)
+        val builder = ProcessBuilder().command("node", countJsPath, inPath + randomName + pdf)
         val countProcess = builder.start()
         countProcess.waitFor()
         val results = BufferedReader(InputStreamReader(countProcess.inputStream)).lines().toList()
@@ -67,7 +67,7 @@ class FlattenPdfService(
             //val mvm : MultiValueMap<String, String> = LinkedMultiValueMap(params);
 
             val output = driver.executeCdpCommand( "Page.printToPDF", printParams )
-            val filename = "/tmp/pdf.js/out/$randomName$i$pdf"
+            val filename = "$outPath$randomName$i$pdf"
             val fileOutputStream: FileOutputStream = FileOutputStream(filename)
             val byteArray = Base64.getDecoder().decode(output.get("data") as String)
             fileOutputStream.write(byteArray)
@@ -76,7 +76,7 @@ class FlattenPdfService(
         }
 
         log.info { "Starting merge "}
-        val completeFilename = "/tmp/pdf.js/out/$randomName$pdf"
+        val completeFilename = "$outPath$randomName$pdf"
 //        val completeFileOutputStream: FileOutputStream = FileOutputStream(completeFilename)
 //    completeFileOutputStream.write(byteArray)
 //    completeFileOutputStream.close()
@@ -85,7 +85,7 @@ class FlattenPdfService(
         utility.destinationFileName = completeFilename
 
         for (i in 1..totalPages) {
-            val filename = "/tmp/pdf.js/out/$randomName$i$pdf"
+            val filename = "$outPath$randomName$i$pdf"
             log.info { "Adding $filename "}
             utility.addSource(filename)
         }
