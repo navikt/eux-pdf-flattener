@@ -49,6 +49,7 @@ class FlattenPdfService(
         File(inPath + randomName + pdf).writeBytes(incomingPdf)
         val builder = ProcessBuilder().command("node", countJsPath, randomName + pdf)
         val countProcess = builder.start()
+        countProcess.waitFor()
         val results = BufferedReader(InputStreamReader(countProcess.inputStream)).lines().toList()
         var totalPages = 0
         if (!results.isEmpty()) {
