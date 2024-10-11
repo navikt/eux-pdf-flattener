@@ -11,4 +11,5 @@ pdfjsLib.getDocument({ url: args[0], enableXfa : true }).promise.then(function (
     //process.stdout.write('Number of Pages: ' + numPages)
     process.stdout.write(numPages)
 
+
 })
