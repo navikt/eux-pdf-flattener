@@ -31,7 +31,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <swagger.annotations.version>2.2.7</swagger.annotations.version>
-        <pdfbox.version>2.0.22</pdfbox.version>
+        <pdfbox.version>2.0.24</pdfbox.version>
         <apache-poi.version>4.1.2</apache-poi.version>
         <twelvemonkeys-imageio.version>3.5</twelvemonkeys-imageio.version>
         <opensagres.version>2.0.2</opensagres.version>
