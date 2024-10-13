@@ -58,3 +58,7 @@ spec:
         - application: {{ application.eux-fagmodul-journalfoering.name }}
           namespace: {{ application.eux-fagmodul-journalfoering.namespace }}
           cluster: {{ cluster.fss }}
+    outbound:
+      external:
+        - host: https://googlechromelabs.github.io
+
