@@ -21,6 +21,7 @@ class FlattenPdfService(
             "--disable-infobars",
             "--disable-extensions",
             "--disable-popup-blocking",
+            "--remote-debugging-pipe",
             "--run-all-compositor-stages-before-draw",
             "--disable-gpu",
 //        "--virtual-time-budget=10000",
