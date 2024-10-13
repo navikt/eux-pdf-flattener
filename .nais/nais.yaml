@@ -60,5 +60,5 @@ spec:
           cluster: {{ cluster.fss }}
     outbound:
       external:
-        - host: https://googlechromelabs.github.io
+        - host: googlechromelabs.github.io
 
