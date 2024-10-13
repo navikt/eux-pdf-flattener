@@ -58,6 +58,7 @@ RUN chmod 777 /home/apprunner
 RUN chmod 777 pdf.js
 RUN cd pdf.js && npm install -g gulp-cli
 RUN npm install -g -save html-pdf-chrome
+# RUN npm install -g chromedriver
 RUN npm install -g pm2
 RUN npm install -g -save pdfjs-dist@3.11.174
 COPY ./print.js ./xfa.pdf ./count.js ./medical.pdf /

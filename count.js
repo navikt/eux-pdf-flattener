@@ -9,7 +9,7 @@ pdfjsLib.getDocument({ url: args[0], enableXfa : true }).promise.then(function (
     console.log(numPages);
     //process.stdout.write('## Document Loaded')
     //process.stdout.write('Number of Pages: ' + numPages)
-    process.stdout.write(numPages)
+    process.stdout.write("" + numPages)
 
 
 })
