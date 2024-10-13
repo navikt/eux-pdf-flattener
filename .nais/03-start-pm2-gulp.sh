@@ -5,6 +5,7 @@ set -e
 export PM2_HOME="/tmp/.pm2"
 export XDG_CONFIG_HOME="/tmp/.chromium"
 export XDG_CACHE_HOME="/tmp/.chromium"
+export SE_CACHE_PATH="/tmp/.cache/selenium"
 pm2 start google-chrome \
   --interpreter none \
   -- \
