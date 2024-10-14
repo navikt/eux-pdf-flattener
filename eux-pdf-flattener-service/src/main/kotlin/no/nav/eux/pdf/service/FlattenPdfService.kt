@@ -25,7 +25,21 @@ class FlattenPdfService(
             "--run-all-compositor-stages-before-draw",
             "--disable-gpu",
 //        "--virtual-time-budget=10000",
-            "--no-pdf-header-footer"
+            "--no-pdf-header-footer",
+            "--no-sandbox",
+            "--interpreter=none",
+            "--disable-translate",
+            "--disable-background-networking",
+            "--safebrowsing-disable-auto-update",
+            "--disable-sync",
+            "--metrics-recording-only",
+            "--disable-default-apps",
+            "--no-first-run",
+            "--mute-audio",
+            "--hide-scrollbars",
+            "--remote-debugging-port",
+            "--disable-crash-reporter",
+            "--no-crashpad"
         )
     val printParams = mapOf(
         "landscape" to false,
