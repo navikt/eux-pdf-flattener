@@ -37,7 +37,7 @@ class FlattenPdfService(
             "--no-first-run",
             "--mute-audio",
             "--hide-scrollbars",
-            "--remote-debugging-port",
+            "--remote-debugging-port=9222",
             "--disable-crash-reporter",
             "--no-crashpad"
         )
