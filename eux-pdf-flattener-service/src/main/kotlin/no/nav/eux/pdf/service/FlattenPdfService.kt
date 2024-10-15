@@ -17,11 +17,12 @@ class FlattenPdfService(
 ) {
     val options = ChromeOptions()
         .addArguments(
-            "--headless=new",
+//            "--headless=new",
+            "--headless",
             "--disable-infobars",
             "--disable-extensions",
             "--disable-popup-blocking",
-            "--remote-debugging-pipe",
+//            "--remote-debugging-pipe",
             "--run-all-compositor-stages-before-draw",
             "--disable-gpu",
 //        "--virtual-time-budget=10000",
