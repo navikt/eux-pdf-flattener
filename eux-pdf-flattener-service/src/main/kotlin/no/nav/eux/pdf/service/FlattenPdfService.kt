@@ -15,6 +15,7 @@ import java.util.*
 class FlattenPdfService(
     val om: ObjectMapper,
 ) {
+    /*
     val options = ChromeOptions()
         .addArguments(
 //            "--headless=new",
@@ -42,6 +43,11 @@ class FlattenPdfService(
             "--disable-crash-reporter",
             "--no-crashpad"
         )
+
+     */
+    val options = ChromeOptions()
+        .setExperimentalOption("debuggerAddress","127.0.0.1:9222")
+
     val printParams = mapOf(
         "landscape" to false,
         "paperWidth" to 8.27,
