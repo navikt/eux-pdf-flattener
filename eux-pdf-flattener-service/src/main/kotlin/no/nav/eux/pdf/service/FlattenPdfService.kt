@@ -4,10 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging.logger
 import org.apache.pdfbox.io.MemoryUsageSetting
 import org.apache.pdfbox.multipdf.PDFMergerUtility
+import org.openqa.selenium.By
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.stereotype.Service
 import java.io.*
+import java.time.Duration
 import java.util.*
 
 
@@ -94,24 +98,65 @@ class FlattenPdfService(
             totalPages = results.get(0).trim().toInt()
             log.info { "Count $totalPages" }
         }
+        val driver: ChromeDriver = ChromeDriver(options)
+        val url = "http://localhost:8888/web/viewer.html?file=/in/$randomName$pdf#page=1"
+        driver.get(url)
 
         for (i in 1..totalPages) {
             log.info {"Processing page $i" }
-            val driver: ChromeDriver = ChromeDriver(options)
 // const url = 'http://localhost:8888/web/viewer.html?file=/in/' + args[0] + args[1] + '#page=' +args[2];
             val url = "http://localhost:8888/web/viewer.html?file=/in/$randomName$pdf#page=$i"
-            driver.get(url)
-            Thread.sleep(10000L)
-            //val mvm : MultiValueMap<String, String> = LinkedMultiValueMap(params);
+            driver.navigate().to(url)
+            //Thread.sleep(10000L)
+            val wait: WebDriverWait =
+                WebDriverWait(driver, Duration.ofSeconds(20))
 
+                    /*
+                    .withTimeout(Duration.ofSeconds(2))
+                    .pollingEvery(Duration.ofMillis(300))
+                    .ignoring(ElementNotInteractableException::class.java)
+*/
+/*
+            wait.until {
+                fun apply(driver: WebDriver): Boolean {
+                    return (driver as JavascriptExecutor).executeScript("if (window.PDFViewerApplication.eventBus) { return true } else { return false } ") == "complete"
+                }
+            }
+ */
+//            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@class='textLayer']")))
+//            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='outerContainer']")))
+            log.info { "Waiting for page $i"}
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@data-page-number='$i']")))
+
+//            val executeScript = driver.executeScript("return window.PDFViewerApplication.eventBus")
+//            System.out.println("application: " + executeScript)
+//            val eventBus = driver.executeScript("return window.PDFViewerApplication.eventBus")
+//            System.out.println("eventbus: " + eventBus)
+//            val eventBusNotNull = driver.executeScript("if (window.PDFViewerApplication.eventBus) { return true } else { return false } ")
+//            System.out.println("eventbus check:  " + eventBusNotNull)
+//            System.out.println("eventbus check type:  " + eventBusNotNull.javaClass.name)
+            //System.out.println(driver.pageSource)
+            //driver.
+            //wait.until(ExpectedConditions.presenceOfElementLocated(By. .xpath(window.PDFViewerApplication.eventBus)))
+            /*
+            { d: WebDriver? ->
+                revealed.sendKeys("Displayed")
+                true
+            }
+                       //val mvm : MultiValueMap<String, String> = LinkedMultiValueMap(params);
+             */
+            //  window.PDFViewerApplication.eventBus.on('pagerendered', ...);
+
+            log.info { "Printing page $i "}
             val output = driver.executeCdpCommand( "Page.printToPDF", printParams )
             val filename = "$outPath$randomName$i$pdf"
             val fileOutputStream: FileOutputStream = FileOutputStream(filename)
             val byteArray = Base64.getDecoder().decode(output.get("data") as String)
             fileOutputStream.write(byteArray)
             fileOutputStream.close()
-            driver.quit()
+            //driver.close()
         }
+        driver.quit()
 
         log.info { "Starting merge "}
         val completeFilename = "$outPath$randomName$pdf"
