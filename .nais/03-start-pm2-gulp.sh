@@ -25,7 +25,9 @@ pm2 start google-chrome \
   --disable-crash-reporter \
   --no-crashpad \
   --disable-gpu \
-  --disable-extensions
+  --disable-extensions \
+  --run-all-compositor-stages-before-draw \
+  --disable-infobars
 
 # remove root and sandbox-setting
 echo "Copying"
@@ -45,5 +47,3 @@ cd /app
 
 echo "$PWD"
 ls /app
-# npx gulp server
-# tail -f /dev/null

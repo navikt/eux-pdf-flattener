@@ -52,26 +52,20 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 
 RUN apt-get update && apt -y install  ./google-chrome-stable_current_amd64.deb
 
+# RUN wget https://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable/google-chrome-stable_129.0.6668.89-1_amd64.deb
+# RUN apt-get update && apt -y install  ./google-chrome-stable_129.0.6668.89-1_amd64.deb
+
 RUN mkdir /home/apprunner
 RUN mkdir pdf.js
 RUN chmod 777 /home/apprunner
 RUN chmod 777 pdf.js
 RUN cd pdf.js && npm install -g gulp-cli
-RUN npm install -g -save html-pdf-chrome
-# RUN npm install -g chromedriver
 RUN npm install -g pm2
 RUN npm install -g -save pdfjs-dist@3.11.174
-COPY ./print.js ./xfa.pdf ./count.js ./medical.pdf /
+COPY ./count.js  /
 RUN mkdir tmppdf
 RUN chmod 777 tmppdf
-COPY ./xfa.pdf tmppdf/xfa.pdf
-RUN chmod 777 /print.js
 RUN chmod 777 /count.js
-# RUN chmod 777 /chrome.sh
-# RUN chmod 777 /entrypoint.sh
-RUN chmod 777 /xfa.pdf
-RUN chmod 777 /medical.pdf
-RUN chmod 777 tmppdf/xfa.pdf
 RUN chown apprunner pdf.js
 
 # RUN ls -l
@@ -81,41 +75,20 @@ ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 
 RUN git clone https://github.com/mozilla/pdf.js.git
-# RUN ls -l
 RUN cd pdf.js && npm install
 
-#RUN cd pdf.js && npm install
-# RUN cd pdf.js && npm link module gulp
 
 RUN cd pdf.js && mkdir out && mkdir in
-# RUN cp tmppdf/xfa.pdf pdf.js/in/xfa.pdf
 USER root
 RUN cd pdf.js && npm link gulp
 USER apprunner
 RUN chmod -R 777 pdf.js
 RUN google-chrome --version
 
-
-# RUN file="$(ls -1 /usr/local/ -al)" && echo $file
-# RUN file="$(ls -1 /usr/local/nvm/versions/node -al)" && echo $file
-
-
-
-
-
-# ADD eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
-
-# CMD ["node" , "print.js"]
-#ENTRYPOINT ["/entrypoint.sh"]
-# CMD ["tail", "-f", "/dev/null"]
-#CMD ["/chrome.sh"]
 COPY ./.nais/03-start-pm2-gulp.sh /init-scripts/03-start-pm2-gulp.sh
 
 COPY eux-pdf-flattener-webapp/target/eux-pdf-flattener.jar /app/app.jar
 EXPOSE 8080
+# EXPOSE 8888
 
 WORKDIR /app
-
-# ENTRYPOINT ["/entrypoint.sh"]
-
-# CMD ["tail", "-f", "/dev/null"]
