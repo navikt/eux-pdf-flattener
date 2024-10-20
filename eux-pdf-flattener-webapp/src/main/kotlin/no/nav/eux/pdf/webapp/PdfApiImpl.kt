@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging.logger
 import no.nav.eux.pdf.openapi.api.PdfApi
 import no.nav.eux.pdf.service.FlattenPdfService
 import no.nav.security.token.support.core.api.Protected
+import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.http.ContentDisposition
@@ -20,7 +21,7 @@ class PdfApiImpl(
 ) : PdfApi {
     val log = logger {}
 
-    @Protected
+    @Unprotected
     override fun flattenPdf(file: Resource?): ResponseEntity<Resource> {
         try {
             val byteArrayResource = ByteArrayResource(pdfService.flattenPdf(file!!.contentAsByteArray))
