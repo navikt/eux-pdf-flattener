@@ -24,12 +24,12 @@ class PdfApiImpl(
     override fun flattenPdf(file: Resource?): ResponseEntity<Resource> {
         try {
             val byteArrayResource = ByteArrayResource(pdfService.flattenPdf(file!!.contentAsByteArray))
-        val map: MultiValueMap<String, String> = LinkedMultiValueMap()
-        map.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
-        map.add(HttpHeaders.CONTENT_LENGTH, byteArrayResource.contentLength().toString())
-        map.add(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(file!!.filename).build().toString())
+            val map: MultiValueMap<String, String> = LinkedMultiValueMap()
+            map.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+            map.add(HttpHeaders.CONTENT_LENGTH, byteArrayResource.contentLength().toString())
+            map.add(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(file!!.filename).build().toString())
 
-        return byteArrayResource.toPdfOkResponseEntity(map)
+            return byteArrayResource.toPdfOkResponseEntity(map)
         } catch (e: RuntimeException) {
             log.error ( "Feilet å konvertere " , e)
             throw e
