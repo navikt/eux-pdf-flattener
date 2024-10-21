@@ -111,6 +111,7 @@ class FlattenPdfService(
         log.info { "Retrieving final file"}
 
         val readBytes = File(completeFilename).readBytes()
+        log.info { "File length ${readBytes.size}" }
         return readBytes
     }
 
