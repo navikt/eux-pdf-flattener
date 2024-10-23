@@ -35,7 +35,7 @@
         <apache-poi.version>4.1.2</apache-poi.version>
         <twelvemonkeys-imageio.version>3.5</twelvemonkeys-imageio.version>
         <opensagres.version>2.0.2</opensagres.version>
-        <tika.version>1.24.1</tika.version>
+        <tika.version>1.28.3</tika.version>
         <json-flattener.version>0.9.0</json-flattener.version>
     </properties>
 
